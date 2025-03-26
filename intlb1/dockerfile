@@ -1,0 +1,19 @@
+# Используем официальный образ PHP с Apache
+FROM php:8.2-apache
+
+# Устанавливаем необходимые расширения PHP
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+
+# Включаем mod_rewrite для Apache
+RUN a2enmod rewrite
+
+# Копируем код проекта в контейнер
+COPY ./www /var/www/html
+
+# Даем права на файлы
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
+# Перезапускаем Apache
+CMD ["apache2-foreground"]
+

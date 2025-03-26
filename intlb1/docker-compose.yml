@@ -1,0 +1,35 @@
+services:
+  php_app:
+    build: .   # Теперь Docker соберет образ из Dockerfile
+    ports:
+      - "8000:80"
+    volumes:
+      - "F:/intlb1/www:/var/www/html"  # Указываем путь к проекту
+    depends_on:
+      - mysql_db
+
+  mysql_db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lb_pdo_rent
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql_db
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - mysql_db
+
+volumes:
+  mysql_data:
+
